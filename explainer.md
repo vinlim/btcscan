@@ -3,13 +3,13 @@ BTCScan is an experimental Bitcoin transaction explorer that intends to explore 
 
 
 ## Challenge
-Despite the Bitcoin protocol being an exciting and disruptive technology that has the potential to change the lives of many, it has a few challenges to be adopted by the mainstream market. One such is understanding the transaction. Often bitcoin users are greeted with explorers that provide comprehensive and extensive information, which typically is no meaningful information, especially to the general users.
+Despite the Bitcoin protocol being an exciting and disruptive technology that has the potential to change the lives of many, it has a few challenges to be adopted by the mainstream market. One such is understanding the transaction. Often bitcoin users are greeted with explorers that provide comprehensive and extensive information, but typically not meaningful information, especially to the general users.
 
 
 ## Design Philosphy & UX Consideration
 BTCScan aimed to reduce cognitive load and minimize confusion by providing only relevant information in a digestible manner. The idea is the lesser, the better. It also aims to emulate UI that is familiar to the users, e.g. digital wallet transactions.
 
-The identified pieces of information are, in the priority order
+The identified key pieces of information are, in the order of priority
 - Transaction Amount (total)
 - Transaction Status - Confirmed or pending, and how long
 - Fee incurred
