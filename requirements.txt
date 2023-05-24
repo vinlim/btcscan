@@ -4,3 +4,5 @@ django-browser-reload==1.8.0
 django-tailwind==3.5.0
 protobuf==4.21.12
 sqlparse==0.4.4
+requests~=2.31.0
+python-dotenv~=1.0.0

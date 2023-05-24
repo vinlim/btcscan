@@ -9,8 +9,11 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()  # take environment variables from .env.
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -29,7 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'explorer.apps',
+    'explorer.apps.ExplorerConfig',
     # 'django.contrib.admin',
     # 'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -129,3 +132,14 @@ INTERNAL_IPS = [
 ]
 
 TAILWIND_APP_NAME = 'theme'
+
+# External Services
+NODE_PROVIDERS = {
+    'quicknode': {
+        'endpoint': os.getenv('QUICKNODE_ENDPOINT', '')
+    },
+    'getblock': {
+        'endpoint': os.getenv('GETBLOCK_ENDPOINT', ''),
+        'auth': os.getenv('GETBLOCK_AUTH', '')
+    }
+}
