@@ -48,6 +48,7 @@ def get_mempools_transactions():
 
     combined = {}
     for mempool in mempools:
+        # Todo: consider making async request to reduce wait time
         results = make_request(mempool)
         combined = {**combined, **results}
 
