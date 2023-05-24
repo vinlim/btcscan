@@ -1,8 +1,8 @@
-from urllib.error import HTTPError
 from django.http import HttpRequest
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from explorer.services import transaction
+from requests import HTTPError
 
 
 def index(request: HttpRequest):
