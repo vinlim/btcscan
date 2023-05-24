@@ -1,3 +1,5 @@
+from http.client import HTTPException
+
 from django.http import HttpRequest
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -23,5 +25,5 @@ def view(request: HttpRequest, tx_hash: str):
             'description': tx.describe
         }
         return render(request, "view.html", context)
-    except Exception:
+    except HTTPException:
         return redirect(f'{reverse("explorer_index")}?err=tx_404')
