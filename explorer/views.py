@@ -1,9 +1,7 @@
-from http.client import HTTPException
-
+from urllib.error import HTTPError
 from django.http import HttpRequest
 from django.shortcuts import render, redirect
 from django.urls import reverse
-
 from explorer.services import transaction
 
 
@@ -25,5 +23,5 @@ def view(request: HttpRequest, tx_hash: str):
             'description': tx.describe
         }
         return render(request, "view.html", context)
-    except HTTPException:
+    except HTTPError:
         return redirect(f'{reverse("explorer_index")}?err=tx_404')
