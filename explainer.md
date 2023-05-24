@@ -59,6 +59,7 @@ Test cases were developed to cover major logic components to verify the function
 During the development, server potential improvements were identified and documented as Todo for future development.
 - Estimator: To handle edge cases for potentially out-of-bound fee-rate. While given the huge dataset from mempools, the risk of this edge case is low, it can be easily mitigated.
 - Mempool: To ensure sufficiently large datasets are used to predict time to confirmation to improve accuracy, pulling mempool transactions synchronously can take up a significant amount of time. Supporting asynchronous jsonrpc requests can greatly reduce the total time required.
-
+- Feature Detection: To detect feature of transactions (RBF, CPFP) to provide only relevant recommendation 
+- View: Consider refactoring view.html as it gets over broad
 
 
