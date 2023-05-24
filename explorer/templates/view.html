@@ -1,7 +1,97 @@
 {% extends '_layouts/app.html' %}
-
+{% load crypto %}
 {% block layout %}
-    <div class="p-4">
-        {{ tx_hash }}
+    <div class="flex justify-center items-center">
+        <img class="w-7 mb-4 me-1"
+             alt="BTCScan Logo"
+             src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/800px-Bitcoin.svg.png">
+        <h2 class="text-2xl font-black font-sans mb-4">BTCScan</h2>
+    </div>
+
+    <div class="max-w-md mx-auto bg-white rounded-md shadow-md overflow-hidden md:max-w-2xl mb-16 p-4 border border-gray-100">
+        <div class="md:flex">
+            <div class="md:shrink-0 flex justify-center items-center flex-col p-6">
+                {% if transaction.confirmed %}
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
+                         stroke="currentColor" class="w-16 h-16 text-green-500">
+                        <path strokeLinecap="round" strokeLinejoin="round"
+                              d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <div class="text-xs bg-green-500 text-white p-1 mt-2">
+                        Confirmed
+                    </div>
+                {% else %}
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                         stroke="currentColor" class="w-16 h-16 text-yellow-500 animate-spin">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M21 7.5l-2.25-1.313M21 7.5v2.25m0-2.25l-2.25 1.313M3 7.5l2.25-1.313M3 7.5l2.25 1.313M3 7.5v2.25m9 3l2.25-1.313M12 12.75l-2.25-1.313M12 12.75V15m0 6.75l2.25-1.313M12 21.75V19.5m0 2.25l-2.25-1.313m0-16.875L12 2.25l2.25 1.313M21 14.25v2.25l-2.25 1.313m-13.5 0L3 16.5v-2.25"/>
+                    </svg>
+                    <div id="estimating-indicator" class="text-xs bg-amber-500 text-white p-1 mt-2 animate-pulse">
+                        Estimating
+                    </div>
+                    <div id="estimation-element" class="text-xs text-gray-700 p-1 mt-2 font-light hidden text-center">
+                        Confirming in <br>
+                        <span></span> minutes
+                    </div>
+                {% endif %}
+            </div>
+            <div class="p-8">
+                <div class="flex justify-end flex-col items-center mb-5 border border-gray-300 p-3 rounded-md">
+                    <div class="font-light text-sm text-gray-500 mb-0">Amount in BTC</div>
+                    <div class="uppercase tracking-wide font-semibold text-xl">{{ transaction.amount|sat_to_btc }}</div>
+                </div>
+                <div class="mb-2">
+                    <div class="font-light text-xs text-gray-500 mb-0">Fee</div>
+                    <div class="text-sm">{{ transaction.fee|sat_to_btc }} BTC</div>
+                </div>
+                <div class="mb-2">
+                    <div class="font-light text-xs text-gray-500 mb-0">Date</div>
+                    <div class="text-sm">2023-12-01 10pm</div>
+                </div>
+                <div class="mb-2">
+                    <div class="font-light text-xs text-gray-500 mb-0">Transaction ID</div>
+                    <div class="text-sm">{{ transaction.txid|shorten_hash }}</div>
+                </div>
+
+                <p id="tx-description" class="mt-3 text-slate-500">
+                    {{ description }}
+                </p>
+            </div>
+
+
+        </div>
     </div>
 {% endblock %}
+
+{% block script %}
+    <script>
+        {% if not transaction.confirmed %}
+            async function estimate() {
+                let response = await fetch('{% url 'api_estimator' %}?tx_hash={{ transaction.txid }}');
+                let payload = await response.json() // {status: 'ok', result: {time_to_confirmation: 120, description: 'describe'}}
+                console.log(payload)
+                if (payload && payload.status === 'ok') {
+                    updateEstimate(payload.result.time_to_confirmation)
+                    updateDescription(payload.result.description)
+                }
+            }
+
+            function updateEstimate(minute) {
+                let estimatingIndicator = document.getElementById('estimating-indicator');
+                let estimationElement = document.getElementById('estimation-element');
+                estimatingIndicator.classList.add('hidden');
+                estimationElement.classList.remove('hidden');
+                estimationElement.getElementsByTagName('span')[0].innerText = minute
+            }
+
+            function updateDescription(description) {
+                let descriptionElement = document.getElementById('tx-description')
+                descriptionElement.innerHTML = description
+            }
+
+            estimate()
+        {%  endif %}
+    </script>
+{% endblock %}
+
+

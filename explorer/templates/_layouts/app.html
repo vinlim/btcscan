@@ -2,12 +2,8 @@
 
 {% block main %}
     {% include '_layouts/nav.html' %}
-    <body class="bg-gray-50 font-serif leading-normal tracking-normal">
-    <div class="container mx-auto">
-        <section class="flex items-center justify-center h-screen">
-            {% block layout %}
-            {% endblock %}
-        </section>
+    <div class="flex items-center justify-center flex-col h-screen p-3">
+        {% block layout %}
+        {% endblock %}
     </div>
-    </body>
 {% endblock %}
