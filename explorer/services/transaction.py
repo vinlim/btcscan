@@ -35,7 +35,7 @@ class Transaction:
         transaction_doing = f"This is transaction is sending { '{:.8f}'.format(utils.sat_to_btc(self.amount)) } BTC to {address_count} addresses. " \
             if not self.confirmed else \
             f"This transaction sent { '{:.8f}'.format(utils.sat_to_btc(self.amount)) } BTC to {address_count} addresses. "
-        transaction_state = f"The transaction is now being confirmed" \
+        transaction_state = f"The transaction is now confirming" \
             if not self.confirmed else \
             f"The transaction is confirmed."
         transaction_estimation = f", and will be confirmed in approximately {estimated_time_to_confirmation} minutes. "
