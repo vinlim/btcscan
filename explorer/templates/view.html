@@ -1,16 +1,16 @@
 {% extends '_layouts/app.html' %}
-{% load crypto %}
+{% load crypto common %}
 {% block layout %}
-    <div class="flex justify-center items-center">
+    <a href="{% url 'explorer_index' %}" class="flex justify-center items-center">
         <img class="w-7 mb-4 me-1"
              alt="BTCScan Logo"
              src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/800px-Bitcoin.svg.png">
         <h2 class="text-2xl font-black font-sans mb-4">BTCScan</h2>
-    </div>
+    </a>
 
-    <div class="max-w-md mx-auto bg-white rounded-md shadow-md overflow-hidden md:max-w-2xl mb-16 p-4 border border-gray-100">
+    <div class="max-w-md mx-auto bg-white rounded-md shadow-md md:max-w-2xl overflow-scroll mb_6 md:mb-12 p-4 border border-gray-100">
         <div class="md:flex">
-            <div class="md:shrink-0 flex justify-center items-center flex-col p-6">
+            <div class="md:shrink-0 flex justify-center items-center flex-col p-3 md:p-6">
                 {% if transaction.confirmed %}
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
                          stroke="currentColor" class="w-16 h-16 text-green-500">
@@ -35,23 +35,26 @@
                     </div>
                 {% endif %}
             </div>
-            <div class="p-8">
+            <div class="p-4 md:p-8">
                 <div class="flex justify-end flex-col items-center mb-5 border border-gray-300 p-3 rounded-md">
                     <div class="font-light text-sm text-gray-500 mb-0">Amount in BTC</div>
                     <div class="uppercase tracking-wide font-semibold text-xl">{{ transaction.amount|sat_to_btc }}</div>
+                </div>
+                <div class="mb-2">
+                    <div class="font-light text-xs text-gray-500 mb-0">Transaction ID</div>
+                    <div class="text-sm">{{ transaction.txid|shorten_hash }}</div>
                 </div>
                 <div class="mb-2">
                     <div class="font-light text-xs text-gray-500 mb-0">Fee</div>
                     <div class="text-sm">{{ transaction.fee|sat_to_btc }} BTC</div>
                 </div>
                 <div class="mb-2">
-                    <div class="font-light text-xs text-gray-500 mb-0">Date</div>
-                    <div class="text-sm">2023-12-01 10pm</div>
+                    <div class="font-light text-xs text-gray-500 mb-0">Date & Time</div>
+                    <div class="text-sm">{% if transaction.block_time %}
+                        {{ transaction.block_time|epoch_to_time|date:"Y-m-d H:i" }} {% else %}
+                        Confirming {% endif %}</div>
                 </div>
-                <div class="mb-2">
-                    <div class="font-light text-xs text-gray-500 mb-0">Transaction ID</div>
-                    <div class="text-sm">{{ transaction.txid|shorten_hash }}</div>
-                </div>
+
 
                 <p id="tx-description" class="mt-3 text-slate-500">
                     {{ description }}
@@ -59,6 +62,53 @@
             </div>
 
 
+        </div>
+        <div class="w-full mt-4">
+            <div id="accordion-header" class="px-4 py-2 cursor-pointer text-gray-700 flex justify-center items-center">
+                <h2 class="text-xs text-gray-500 ">
+                    More Information
+                </h2>
+                <div class="ml-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                         stroke="currentColor" class="w-3 h-3">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M19.5 5.25l-7.5 7.5-7.5-7.5m15 6l-7.5 7.5-7.5-7.5"/>
+                    </svg>
+                </div>
+            </div>
+            <div id="accordion-content" class="p-4 border-t hidden">
+                <h2 class="text-slate-500 mb-2">Details</h2>
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="bg-gray-50 rounded-md p-2 flex flex-col md:flex-row md:justify-between md:items-center">
+                        <div class="text-xs md:text-sm text-slate-500 mb-1 md:mb-0">Size</div>
+                        <div class="text-xs md:text-base">{{ transaction.size }}<span
+                                class="text-slate-500 text-xs ms-1">B</span></div>
+                    </div>
+                    <div class="bg-gray-50 rounded-md p-2 flex flex-col md:flex-row md:justify-between md:items-center">
+                        <div class="text-xs md:text-sm text-slate-500 mb-1 md:mb-0">Virtual Size</div>
+                        <div class="text-xs md:text-base">{{ transaction.v_size }}<span
+                                class="text-slate-500 text-xs ms-1">vB</span></div>
+                    </div>
+                    <div class="bg-gray-50 rounded-md p-2 flex flex-col md:flex-row md:justify-between md:items-center">
+                        <div class="text-xs md:text-sm text-slate-500 mb-1 md:mb-0">Weight</div>
+                        <div class="text-xs md:text-base">{{ transaction.weight }}<span
+                                class="text-slate-500 text-xs ms-1">WU</span></div>
+                    </div>
+                    <div class="bg-gray-50 rounded-md p-2 flex flex-col md:flex-row md:justify-between md:items-center">
+                        <div class="text-xs md:text-sm text-slate-500 mb-1 md:mb-0">Fee</div>
+                        <div class="text-xs md:text-base">{{ transaction.fee }}</div>
+                    </div>
+                    <div class="bg-gray-50 rounded-md p-2 flex flex-col md:flex-row md:justify-between md:items-center">
+                        <div class="text-xs md:text-sm text-slate-500 mb-1 md:mb-0">Fee Rate</div>
+                        <div class="text-xs md:text-base">{{ transaction.fee_rate|floatformat:2 }}</div>
+                    </div>
+                    <div class="bg-gray-50 rounded-md p-2 flex flex-col md:flex-row md:justify-between md:items-center">
+                        <div class="text-xs md:text-sm text-slate-500 mb-1 md:mb-0">Block</div>
+                        <div class="text-xs md:text-base">{% if transaction.block_height %}
+                            {{ transaction.block_height }} {% else %} - {% endif %}</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}
@@ -91,6 +141,15 @@
 
             estimate()
         {%  endif %}
+
+        document.getElementById('accordion-header').addEventListener('click', function () {
+            const content = document.getElementById('accordion-content');
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+            } else {
+                content.classList.add('hidden');
+            }
+        });
     </script>
 {% endblock %}
 

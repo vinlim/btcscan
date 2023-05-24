@@ -24,6 +24,7 @@ class Transaction:
         self.block_height = block_height
         self.block_hash = block_hash
         self.block_time = block_time
+        self.v_size = int(weight / 4)
         self.fee_rate = fee / weight * 4
         self.amount: int = sum(output['value'] for output in vout)
 

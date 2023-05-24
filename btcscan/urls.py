@@ -17,6 +17,6 @@ Including another URLconf
 from django.urls import path, include
 
 urlpatterns = [
-    path('', include('explorer.urls'), name='explorer.index'),
+    path('', include('explorer.urls')),
     path("__reload__/", include("django_browser_reload.urls")),
 ]
