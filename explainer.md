@@ -23,6 +23,7 @@ There are several UI/UX Techniques were implemented to create a hierarchy of inf
 - Color-coded icons and text of transaction status provide instant comprehension of the state of the transaction with no cognitive load attempting to locate it
 - Should the transaction is pending, it will attempt to estimate the time required for the transaction based on the network condition
 - The structured layout of secondary information (txid, fee, date & time) allow users to glance through quickly and pick up the information as needed.
+- Transaction hash is shorten as humans have a cognitive limit to the amount of information they can process.
 - A simple text sentence describing the summary of the transaction helps users to gain a better understanding of the the transaction
 - Should the transaction is in confirming state, recommendation of available options are provided to the users
 - As a stepping stone for users looking to learn more about Bitcoin transaction a collapsed “more information” section with advanced details are available to the user with one click. This was intentionally hidden to prevent confusing the general users.
